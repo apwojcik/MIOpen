@@ -222,18 +222,18 @@ bool ConvBinWinogradRxS::IsApplicable(const ExecutionContext& ctx,
         return false;
     if(!(problem.IsFp32() || problem.IsFp16()))
         return false;
-    if(miopen::IsDisabled(MIOPEN_DEBUG_AMD_WINOGRAD_RXS{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_AMD_WINOGRAD_RXS))
         return false;
     if(problem.direction.IsBackwardWrW())
     {
-        if(miopen::IsDisabled(MIOPEN_DEBUG_AMD_WINOGRAD_RXS_WRW{}))
+        if(miopen::IsDisabled(MIOPEN_DEBUG_AMD_WINOGRAD_RXS_WRW))
             return false;
         if(!(problem.IsFp32() && problem.kernel_stride_w == 1 && problem.kernel_stride_h == 1))
             return false; // WrW is only for fp32 and no stride for now.
     }
     else
     {
-        if(miopen::IsDisabled(MIOPEN_DEBUG_AMD_WINOGRAD_RXS_FWD_BWD{}))
+        if(miopen::IsDisabled(MIOPEN_DEBUG_AMD_WINOGRAD_RXS_FWD_BWD))
             return false;
     }
     if(!ctx.use_asm_kernels)
@@ -339,7 +339,7 @@ ConvSolution ConvBinWinogradRxS::GetSolution(const ExecutionContext& ctx,
     {
         kernel.kernel_name = "miopenSp3AsmConvRxSU";
         kernel.kernel_file = "Conv_Winograd_";
-        if(miopen::IsEnabled(MIOPEN_DEBUG_SRAM_EDC_DISABLED{}))
+        if(miopen::IsEnabled(MIOPEN_DEBUG_SRAM_EDC_DISABLED))
             kernel.kernel_file += "v13_3_12";
         else
             kernel.kernel_file += "v14_3_3";

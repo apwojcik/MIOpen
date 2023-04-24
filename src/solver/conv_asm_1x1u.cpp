@@ -155,7 +155,7 @@ bool PerformanceConfigConvAsm1x1U::SetNextValue(const ConvolutionContext& /*ctx*
     {
         if(!NextLinear<1, 4>(read_size))
             break;
-        if(!miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_ASM_1X1U_SEARCH_OPTIMIZED{}))
+        if(!miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_ASM_1X1U_SEARCH_OPTIMIZED))
         {
             /// Narrow search space in optimized mode.
             if(use_spare_set ? !Next_1_4(k_mult) : !NextTwoPower<8, 32>(k_mult))
@@ -199,7 +199,7 @@ bool PerformanceConfigConvAsm1x1U::SetNextValue(const ConvolutionContext& /*ctx*
 PerformanceConfigConvAsm1x1U::PerformanceConfigConvAsm1x1U(bool spare)
     : PerformanceConfigConvAsm1x1U(1, 1, 1, 1, 1, 1, 1, 1, spare)
 {
-    if(!miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_ASM_1X1U_SEARCH_OPTIMIZED{}))
+    if(!miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_ASM_1X1U_SEARCH_OPTIMIZED))
     {
         k_mult     = spare ? 1 : 8;
         chunk_size = spare ? 1 : 16;
@@ -373,7 +373,7 @@ bool ConvAsm1x1U::IsValidPerformanceConfig(const ProblemDescription& problem,
 bool ConvAsm1x1U::IsApplicable(const ConvolutionContext& ctx,
                                const ProblemDescription& problem) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_ASM_1X1U{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_ASM_1X1U))
         return false;
     if(!ctx.use_asm_kernels)
         return false;
@@ -666,7 +666,7 @@ ConvSolution ConvAsm1x1U::GetSolution(const ConvolutionContext& ctx,
     PerformanceConfigConvAsm1x1U fromEnv;
     {
         std::string s;
-        const auto p_asciz = miopen::GetStringEnv(MIOPEN_DEBUG_CONV_DIRECT_ASM_1X1U_PERF_VALS{});
+        const auto p_asciz = miopen::GetStringEnv(MIOPEN_DEBUG_CONV_DIRECT_ASM_1X1U_PERF_VALS);
         if(p_asciz != nullptr)
         {
             s = std::string(p_asciz);

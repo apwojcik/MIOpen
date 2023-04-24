@@ -172,7 +172,7 @@ template <int N_BATCH_LOOPS>
 bool PerformanceConfigConvOclBwdWrw2<N_BATCH_LOOPS>::SetNextValue(const ConvolutionContext& /*ctx*/)
 {
     // Increment with wrap-around:
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_OCL_WRW2_SEARCH_OPTIMIZED{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_OCL_WRW2_SEARCH_OPTIMIZED))
     {
         do
         {
@@ -448,7 +448,7 @@ template <int N_BATCH_LOOPS>
 bool ConvOclBwdWrW2<N_BATCH_LOOPS>::IsApplicableBase(const ConvolutionContext& ctx,
                                                      const ProblemDescription& problem) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_OCL_WRW2{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_OCL_WRW2))
         return false;
     if(!ctx.use_opencl_convolutions)
         return false;

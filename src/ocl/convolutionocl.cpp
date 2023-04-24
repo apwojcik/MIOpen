@@ -150,7 +150,7 @@ std::vector<miopen::solver::ConvSolution>
 ConvolutionDescriptor::FindWinogradSolutions(const ConvolutionContext& ctx,
                                              const AnyInvokeParams& invoke_ctx) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD))
         return {};
     try
     {
@@ -168,7 +168,7 @@ ConvolutionDescriptor::FindDataGemmSolutions(const ConvolutionContext& ctx,
                                              const AnyInvokeParams& invoke_ctx) const
 {
 #if MIOPEN_USE_GEMM
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM))
         return {};
     try
     {
@@ -196,7 +196,7 @@ ConvolutionDescriptor::FindDataDirectSolutions(Handle& handle,
                                                const AnyInvokeParams& invoke_ctx) const
 {
 
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT))
         return {};
 
     const auto dir = isForward ? conv::Direction::Forward : conv::Direction::BackwardData;
@@ -230,7 +230,7 @@ ConvolutionDescriptor::FindDataImplicitGemmSolutions(Handle& handle,
                                                      const AnyInvokeParams& invoke_ctx) const
 {
 
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM))
         return {};
 
     const auto dir = isForward ? conv::Direction::Forward : conv::Direction::BackwardData;
@@ -260,7 +260,7 @@ ConvolutionDescriptor::FindFftSolutions(const ConvolutionContext& ctx,
                                         const AnyInvokeParams& invoke_ctx) const
 {
 
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_FFT{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_FFT))
         return {};
 
     try
@@ -283,7 +283,7 @@ static void EvaluateInvokers(Handle& handle,
                              DbRecord& record)
 {
 
-    const char* const arch = miopen::GetStringEnv(MIOPEN_DEVICE_ARCH{});
+    const char* const arch = miopen::GetStringEnv(MIOPEN_DEVICE_ARCH);
     if(arch != nullptr && strlen(arch) > 0)
     {
         return;
@@ -519,7 +519,7 @@ void ConvolutionDescriptor::FindConvFwdAlgorithm(Handle& handle,
         });
     }
 
-    if(IsEnabled(MIOPEN_DEBUG_COMPILE_ONLY{}))
+    if(IsEnabled(MIOPEN_DEBUG_COMPILE_ONLY))
         MIOPEN_THROW(
             miopenStatusGpuOperationsSkipped,
             "MIOPEN_DEBUG_COMPILE_ONLY is enabled, escaping forward convolution. Search skipped.");
@@ -648,7 +648,7 @@ static void ConvForwardCheckNumerics(const Handle& handle,
 
     flag |= miopen::checkNumericsOutput(handle, tensors.yDesc, tensors.y);
 
-    const char* file_name = miopen::GetStringEnv(MIOPEN_DUMP_TENSOR_PATH{});
+    const char* file_name = miopen::GetStringEnv(MIOPEN_DUMP_TENSOR_PATH);
     if(flag && static_cast<bool>(file_name))
     {
         std::string file_name_str = file_name;
@@ -763,15 +763,15 @@ static inline bool IsAlgorithmDisabled(const miopenConvAlgorithm_t algo)
     switch(algo)
     { // clang-format off
     case miopenConvolutionAlgoGEMM:
-        return !MIOPEN_USE_GEMM || miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM{});
+        return !MIOPEN_USE_GEMM || miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM);
     case miopenConvolutionAlgoDirect:
-        return miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT{});
+        return miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT);
     case miopenConvolutionAlgoFFT:
-        return miopen::IsDisabled(MIOPEN_DEBUG_CONV_FFT{});
+        return miopen::IsDisabled(MIOPEN_DEBUG_CONV_FFT);
     case miopenConvolutionAlgoWinograd:
-        return miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD{});
+        return miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD);
     case miopenConvolutionAlgoImplicitGEMM:
-        return miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM{});
+        return miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM);
     default: // Disable future algos by default to enforce explicit handling:
         return true;
     } // clang-format on
@@ -809,7 +809,7 @@ void ConvolutionDescriptor::GetSolutionsFallback(Handle& handle,
                                                  size_t* const solutionCount,
                                                  miopenConvSolution_t* const solutions) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMMED_FALLBACK{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMMED_FALLBACK))
     {
         MIOPEN_LOG_I("Disabled via environment");
         *solutionCount = 0;
@@ -1277,7 +1277,7 @@ void ConvolutionDescriptor::FindConvBwdDataAlgorithm(Handle& handle,
         });
     }
 
-    if(IsEnabled(MIOPEN_DEBUG_COMPILE_ONLY{}))
+    if(IsEnabled(MIOPEN_DEBUG_COMPILE_ONLY))
         MIOPEN_THROW(
             miopenStatusGpuOperationsSkipped,
             "MIOPEN_DEBUG_COMPILE_ONLY is enabled, escaping bwd convolution. Search skipped.");
@@ -1325,7 +1325,7 @@ static void ConvBwdCheckNumerics(const Handle& handle,
 
     flag |= miopen::checkNumericsOutput(handle, tensors.dxDesc, tensors.dx);
 
-    const char* file_name = miopen::GetStringEnv(MIOPEN_DUMP_TENSOR_PATH{});
+    const char* file_name = miopen::GetStringEnv(MIOPEN_DUMP_TENSOR_PATH);
     if(flag && static_cast<bool>(file_name))
     {
         std::string file_name_str = file_name;
@@ -1582,16 +1582,16 @@ void ConvolutionDescriptor::FindConvBwdWeightsAlgorithm(Handle& handle,
                                                           this->attribute.gfx90aFp16alt.GetWrW()};
 
             // Find solutions
-            const auto gemm        = !miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM{})
+            const auto gemm        = !miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM)
                                          ? FindAllGemmSolutions(ctx, invoke_ctx)
                                          : std::vector<miopen::solver::ConvSolution>{};
-            const auto direct      = !miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT{})
+            const auto direct      = !miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT)
                                          ? FindAllBwdWrW2DSolutions(ctx, invoke_ctx)
                                          : std::vector<miopen::solver::ConvSolution>{};
-            const auto winograd    = !miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD{})
+            const auto winograd    = !miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD)
                                          ? FindWinogradWrWAllSolutions(ctx, invoke_ctx)
                                          : std::vector<miopen::solver::ConvSolution>{};
-            const auto implictgemm = !miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM{})
+            const auto implictgemm = !miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM)
                                          ? FindImplicitGemmWrWAllSolutions(ctx, invoke_ctx)
                                          : std::vector<miopen::solver::ConvSolution>{};
 
@@ -1634,7 +1634,7 @@ void ConvolutionDescriptor::FindConvBwdWeightsAlgorithm(Handle& handle,
         });
     }
 
-    if(IsEnabled(MIOPEN_DEBUG_COMPILE_ONLY{}))
+    if(IsEnabled(MIOPEN_DEBUG_COMPILE_ONLY))
         MIOPEN_THROW(miopenStatusGpuOperationsSkipped,
                      "MIOPEN_DEBUG_COMPILE_ONLY is enabled, "
                      "escaping backwards convolution. Search "
@@ -1682,7 +1682,7 @@ static void ConvWrwCheckNumerics(const Handle& handle,
 
     flag |= miopen::checkNumericsOutput(handle, tensors.dwDesc, tensors.dw);
 
-    const char* file_name = miopen::GetStringEnv(MIOPEN_DUMP_TENSOR_PATH{});
+    const char* file_name = miopen::GetStringEnv(MIOPEN_DUMP_TENSOR_PATH);
     if(flag && static_cast<bool>(file_name))
     {
         std::string file_name_str = file_name;

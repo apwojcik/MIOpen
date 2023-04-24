@@ -293,7 +293,7 @@ TensorDescriptor ConvolutionDescriptor::GetForwardOutputTensor(const TensorDescr
 /// These optimizations are kind of cutting corners, but advantages are quite high.
 bool ConvolutionDescriptor::IsWinograd3x3SupportedAndFast(miopen::ConvolutionContext& ctx) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD))
         return false;
 
     // Disable this performance optimization when we want to run some specific Solver.
@@ -314,7 +314,7 @@ ConvolutionDescriptor::WrwGetValidWorkSpaceSizeGemm(const TensorDescriptor& dyDe
                                                     const TensorDescriptor& dwDesc) const
 {
 #if MIOPEN_USE_GEMM
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM))
         return 0;
 
     const auto ctx =
@@ -389,7 +389,7 @@ std::size_t ConvolutionDescriptor::ForwardGetWorkSpaceSize(Handle& handle,
 
     size_t workspace_size_gemm = 0;
 #if MIOPEN_USE_GEMM
-    if(!miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM{}))
+    if(!miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM))
     {
         decltype(auto) gemm_ws_sz_pairs = AllGemmWorkspaceSize(ctx);
 
@@ -473,7 +473,7 @@ ConvolutionDescriptor::BackwardDataGetWorkSpaceSize(Handle& handle,
 #if MIOPEN_USE_GEMM
     size_t tmp_max_workspace =
         std::max({direct_workspace, implicit_gemm_workspace, workspace_size_winograd});
-    if(!miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM{}))
+    if(!miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM))
     {
         decltype(auto) gemm_ws_sz_pairs = AllGemmWorkspaceSize(ctx);
 
@@ -509,7 +509,7 @@ std::size_t ConvolutionDescriptor::BackwardWeightsGetWorkSpaceSizeGEMM(
     const miopen::ConvolutionContext& ctx) const
 {
 #if MIOPEN_USE_GEMM
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_GEMM))
         return 0;
 
     decltype(auto) gemm_ws_sz_pairs = AllGemmWorkspaceSize(ctx);
@@ -530,7 +530,7 @@ std::size_t ConvolutionDescriptor::BackwardWeightsGetWorkSpaceSizeGEMM(
 std::size_t ConvolutionDescriptor::ForwardBackwardGetWorkSpaceSizeImplicitGemm(
     const miopen::ConvolutionContext& ctx) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM))
     {
         return 0;
     }
@@ -559,7 +559,7 @@ std::size_t ConvolutionDescriptor::ForwardBackwardGetWorkSpaceSizeImplicitGemm(
 std::size_t ConvolutionDescriptor::ForwardBackwardDataGetWorkSpaceSizeDirect(
     const miopen::ConvolutionContext& ctx) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT))
     {
         return 0;
     }
@@ -588,7 +588,7 @@ std::size_t ConvolutionDescriptor::ForwardBackwardDataGetWorkSpaceSizeDirect(
 std::size_t ConvolutionDescriptor::ForwardBackwardDataGetWorkSpaceSizeFFT(
     const miopen::ConvolutionContext& ctx) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_FFT{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_FFT))
         return 0;
 
     try
@@ -615,7 +615,7 @@ std::size_t ConvolutionDescriptor::ForwardBackwardDataGetWorkSpaceSizeFFT(
 std::size_t ConvolutionDescriptor::ForwardBackwardDataGetWorkSpaceSizeWinograd(
     const miopen::ConvolutionContext& ctx) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD))
         return 0;
 
     try
@@ -642,7 +642,7 @@ std::size_t ConvolutionDescriptor::ForwardBackwardDataGetWorkSpaceSizeWinograd(
 std::size_t ConvolutionDescriptor::BackwardWeightsGetWorkSpaceSizeDirect(
     const miopen::ConvolutionContext& ctx) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT))
         return 0;
 
     try
@@ -669,7 +669,7 @@ std::size_t ConvolutionDescriptor::BackwardWeightsGetWorkSpaceSizeDirect(
 std::size_t ConvolutionDescriptor::BackwardWeightsGetWorkSpaceSizeWinograd(
     const miopen::ConvolutionContext& ctx) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_WINOGRAD))
         return 0;
 
     try
@@ -698,7 +698,7 @@ std::size_t ConvolutionDescriptor::BackwardWeightsGetWorkSpaceSizeWinograd(
 std::size_t ConvolutionDescriptor::BackwardWeightsGetWorkSpaceSizeImplicitGemm(
     const miopen::ConvolutionContext& ctx) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM))
         return 0;
 
     try

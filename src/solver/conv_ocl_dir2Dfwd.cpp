@@ -38,7 +38,7 @@ namespace solver {
 bool ConvOclDirectFwd::IsApplicable(const ConvolutionContext& ctx,
                                     const ProblemDescription& problem) const
 {
-    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_OCL_FWD{}))
+    if(miopen::IsDisabled(MIOPEN_DEBUG_CONV_DIRECT_OCL_FWD))
         return false;
     if(!ctx.use_opencl_convolutions)
         return false;
